@@ -1,0 +1,107 @@
+Account:
+   table: "Account"
+   fields:
+     accountNo: "accountNo"
+     ifsc: "ifsc"
+     custId: "custId"
+     type: "type"
+     balance: "balance"
+     branchId: "branchId"
+     status: "status"
+     createdTime: "createdTime"
+     modifiedTime: "modifiedTime"
+     modifiedBy: "modifiedBy"
+   pk: "accountNo"
+   fk:
+     customer_fk:
+       reference: "Customer"
+       field: "custId"
+       referenceField: "custId"
+     branch_fk:
+       reference: "Branch"
+       field: "branchId"
+       referenceField: "branchId"
+   autoInc: "accountNo"
+
+Branch:
+   table: "Branch"
+   fields:
+     branchId: "branchId"
+     branchName: "branchName"
+     branchCode: "branchCode"
+     city: "city"
+     managerId: "managerId"
+     createdTime: "createdTime"
+     modifiedTime: "modifiedTime"
+     modifiedBy: "modifiedBy"
+   pk: "branchId"
+   autoInc: "branchId"
+
+Customer:
+   table: "Customer"
+   fields:
+     custId: "custId"
+     aadharNo: "aadharNo"
+     pan: "pan"
+     status: "status"
+   pk: "custId"
+   fk:
+     user_fk:
+       reference: "Users"
+       field: "custId"
+       referenceField: "userId"
+
+Employee:
+   table: "Employee"
+   fields:
+     empId: "empId"
+     branchId: "branchId"
+   pk: "empId"
+   fk:
+     branch_fk:
+       reference: "Branch"
+       field: "branchId"
+       referenceField: "branchId"
+     user_fk:
+       reference: "Users"
+       field: "empId"
+       referenceField: "userId"
+
+Transaction:
+   table: "Transaction"
+   fields:
+     txnId: "txnId"
+     txnRefNo: "txnRefNo"
+     accountNo: "accountNo"
+     custId: "custId"
+     accountTxnWith: "accountTxnWith"
+     txnDateTime: "txnDateTime"
+     amount: "amount"
+     txnMode: "txnMode"
+   pk: "txnId"
+   fk:
+     account_fk:
+       reference: "Account"
+       field: "accountNo"
+       referenceField: "accountNo"
+     customer_fk:
+       reference: "Customer"
+       field: "custId"
+       referenceField: "custId"
+   autoInc: "txnId"
+
+User:
+   table: "Users"
+   fields:
+     userId: "userId"
+     userName: "userName"
+     userType: "userType"
+     mobileNo: "mobileNo"
+     emailId: "emailId"
+     accountPass: "accountPass"
+     dob: "dob"
+     createdTime: "createdTime"
+     modifiedTime: "modifiedTime"
+     modifiedBy: "modifiedBy"
+   pk: "userId"
+   autoInc: "userId"

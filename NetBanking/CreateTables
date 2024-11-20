@@ -1,0 +1,73 @@
+CREATE DATABASE netBanking;
+
+USE netBanking;
+
+CREATE TABLE IF NOT EXISTS Branch (
+    branchId INT PRIMARY KEY AUTO_INCREMENT,
+    branchName VARCHAR(255) NOT NULL,
+    branchCode INT UNIQUE,
+    city VARCHAR(255),
+    managerId INT,
+    createdTime BIGINT,
+    modifiedTime BIGINT,
+    modifiedBy INT
+);
+
+CREATE TABLE IF NOT EXISTS User (
+    userId INT PRIMARY KEY AUTO_INCREMENT,
+    userName VARCHAR(25) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    userType VARCHAR(50) NOT NULL,
+    mobileNo VARCHAR(15),
+    emailId VARCHAR(255) UNIQUE,
+    accountPass VARCHAR(255) NOT NULL,
+    dob BIGINT,
+    createdTime BIGINT,
+    modifiedTime BIGINT,
+    modifiedBy INT
+);
+
+CREATE TABLE IF NOT EXISTS Customer (
+    custId INT PRIMARY KEY,
+    aadharNo BIGINT UNIQUE NOT NULL,
+    pan VARCHAR(50) UNIQUE,
+    status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (custId) REFERENCES User(userId)
+);
+
+CREATE TABLE IF NOT EXISTS Account (
+    accountNo BIGINT PRIMARY KEY AUTO_INCREMENT,
+    ifsc VARCHAR(50),
+    custId INT,
+    type VARCHAR(50) NOT NULL,
+    balance BIGINT DEFAULT 0,
+    branchId INT,
+    status VARCHAR(10),
+    createdTime BIGINT,
+    modifiedTime BIGINT,
+    modifiedBy INT,
+    FOREIGN KEY (custId) REFERENCES Customer(custId),
+    FOREIGN KEY (branchId) REFERENCES Branch(branchId)
+) AUTO_INCREMENT = 41606553110000;
+
+
+CREATE TABLE IF NOT EXISTS Employee (
+    empId INT PRIMARY KEY,
+    branchId INT,
+    FOREIGN KEY (empId) REFERENCES User(userId),
+    FOREIGN KEY (branchId) REFERENCES Branch(branchId)
+);
+
+CREATE TABLE IF NOT EXISTS Transaction (
+    txnId INT PRIMARY KEY AUTO_INCREMENT,
+    txnRefNo BIGINT NOT NULL, 
+    accountNo BIGINT,
+    custId INT,
+    accountTxnWith BIGINT,
+    txnDateTime BIGINT NOT NULL,
+    amount BIGINT NOT NULL,
+    txnMode VARCHAR(50) NOT NULL,
+    FOREIGN KEY (accountNo) REFERENCES Account(accountNo),
+    FOREIGN KEY (custId) REFERENCES Customer(custId),
+    FOREIGN KEY (accountTxnWith) REFERENCES Account(accountNo)
+);
