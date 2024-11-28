@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MAIN Bank - Login</title>
+<link rel="stylesheet" type="text/css" href="login.css">
+</head>
+<body>
+    <!-- Logo -->
+    <div class="header">
+    <img src="images/logo.png" alt="MAIN Bank Logo" class="logo"> <!-- Replace with your actual logo image path -->    
+    </div>
+
+    <!-- Login Form Container -->
+    <div class="container">
+        <h1 id="loginText">Welcome to <br/>MAIN Bank NetBanking</h1>
+        <div id="loginForm">
+        
+        <div id="errorMessage">
+        <span><img src="images/warning.png" id="warningIcon"/></span>
+        <span class="close" onclick="closeErrorMessage()">x</span>
+        <span id="errorText"></span>
+   		</div>
+   		
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" autocomplete="off" placeholder="Enter your username"><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" autocomplete="off" placeholder="Enter your password">
+            <span id="visibleIcon" onclick="togglePasswordVisibility()">
+            <img id="passwordToggle" src="images/visible.png"></span>
+            <br><br>
+
+            <button type="submit" onclick="validateLogin()">Login</button>
+            <a href="#" id="forget">Forget Username or Password?</a>
+        </div>
+    </div>
+    
+    <div id="footer">
+    <a href="" class="links">Disclaimer</a>
+    <a href="" class="links">Terms and Conditions</a>
+    <a href="" class="links">Privacy Policy</a>
+    <a href="" class="links">Code of Commitment</a>
+    <span id="cr">Copyright &copy; 2024 Main Bank. All rights reserved</span>
+    </div>
+
+	<div id="headerStyle">
+	</div>
+    
+    <script>
+    function showErrorMessage(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        errorText.textContent = message;
+        errorMessage.style.display = 'block'; // Show the error message
+    }
+
+    function closeErrorMessage() {
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.style.display = 'none'; // Hide the error message
+    }
+
+    async function validateLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Clear the error message before validation
+        closeErrorMessage();
+
+        // Check if username and password are empty
+        if (username === "" || password === "") {
+            showErrorMessage("Both the fields are required.");
+            return;
+        }
+
+        try {
+            const response = await fetch('/NetBankingApplication/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }) // Send data as JSON
+            });
+
+            const data = await response.json(); // Parse the JSON response
+
+            if (data.success) {
+                alert("Login successful");
+                localStorage.setItem("userName", data.userName);
+                localStorage.setItem("sessionToken", data.sessionToken);
+                
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+                
+                window.location.href = "/NetBankingApplication/dashboard"; // Redirect on success
+            } else {
+                // Show error message returned from servlet
+                showErrorMessage(data.message);
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            showErrorMessage("An error occurred. Please try again.");
+        }
+    }
+
+    async function togglePasswordVisibility() {
+        var password = document.getElementById('password');
+        var passwordToggle = document.getElementById('passwordToggle');
+        
+        if(password.type === "password") {
+            password.type = "text";
+            passwordToggle.src= "images/invisible.png";
+        } else {
+            password.type = "password";
+            passwordToggle.src = "images/visible.png";
+        }
+    }
+    </script>
+</body>
+</html>

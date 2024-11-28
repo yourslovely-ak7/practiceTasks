@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <div class="headerPart">
+        <a href="/NetBankingApplication/dashboard" id="homePage">Home</a>
+        <div class="nav-container" id="nav-account">
+            <span>My Accounts</span>
+            <div class="nav-menu" id="account-menu">
+                <img src="images/account.jpeg" alt="Account">
+                <ul>
+                    <li><a href="account.html">Account Details</a></li>
+                    <li><a href="#">Recent Transactions</a></li>
+                </ul>
+            </div>
+        </div>  
+        <div class="nav-container" id="nav-payment">
+            <span>Make Payments</span>
+            <div class="nav-menu" id="payment-menu">
+                <img src="images/Money-transfer.jpg" alt="Payments">
+                <ul>
+                    <li><a href="#">Money Transfer</a></li>
+                    <li><a href="#">Credit Card Bill Payment</a></li>
+                    <li><a href="#">Bills Payment and Recharges</a></li>
+                    <li><a href="#">FastTag Payment</a></li>
+                </ul>
+            </div>
+        </div>
+    <div id="profile-container">
+        <img src="images/profile.png" alt="Profile" id="profile-icon">
+        <div id="profile-menu">
+            <ul>
+                <li><a href="/NetBankingApplication/logout"><img src="images/logout.svg" alt="Logout" class="profile-menu-icon"><span class="menuNames">Log Out</span></a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <div id="headerStyle"></div>
+    <div class="header">
+        <img src="images/logoCircle.png" alt="Main Bank Logo" class="logo">
+        <p id="greeting">Hello, User!</p>
+        <p class="greetingLine2">Have a nice Day :)</p>
+    </div>
+
+
+    <!-- Profile Details Section -->
+    <div class="profile-details">
+        <h2>My Profile</h2>
+        <button onclick="editorMode()"><img src="images/edit.webp" id="editButton"/></button>
+        <button onclick="editorMode()" id="cancelEdit">X</button>
+        <h4>Personal Details</h4>
+        <br/>
+        <form onsubmit="return false;">
+            <div class="profile-row">
+                <button type="button" id="saveButton" onclick="saveChanges()">Save Changes</button>
+            </div>
+            <div class="profile-row">
+                <label for="userid">Customer ID:</label>
+                <input type="text" id="userid" name="userid" value="user123" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="user123" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="name">Customer Name:</label>
+                <input type="text" id="name" name="name" value="user123" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" value="+1234567890" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="user@example.com" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" value="1990-01-01" disabled>
+            </div>
+        </form>
+	</div>
+	<div class="profile-details">
+            <h4>Additional Details</h4>
+        <form id="profile-form">
+            <div class="profile-row">
+                <label for="aadhar">Aadhar No:</label>
+                <input type="text" id="aadhar" name="aadhar" value="user@example.com" disabled>
+            </div>
+            <div class="profile-row">
+                <label for="pan">PAN:</label>
+                <input type="text" id="pan" name="pan" value="1990-01-01" disabled>
+            </div>
+        </form>
+    </div>
+
+    <div id="footer">
+        <a href="#" class="links">Disclaimer</a>
+        <a href="#" class="links">Terms and Conditions</a>
+        <a href="#" class="links">Privacy Policy</a>
+        <a href="#" class="links">Code of Commitment</a>
+        <span id="cr">Copyright &copy; 2024 Main Bank. All rights reserved</span>
+    </div>
+    
+<script>
+    let originalValues = {}; // To store the original values for change detection
+
+    window.onload = function () {
+        fetch('/NetBankingApplication/profile')
+            .then(response => response.json())
+            .then(userProfileData => {
+            	
+            	console.log(userProfileData);
+                // Populate the fields with the data
+                document.getElementById('userid').value = userProfileData.userId;
+                document.getElementById('username').value = userProfileData.userName;
+                document.getElementById('name').value = userProfileData.name;
+                document.getElementById('phone').value = userProfileData.mobileNo;
+                document.getElementById('email').value = userProfileData.emailId;
+                document.getElementById('dob').value = formatDateToYYYYMMDD(new Date(userProfileData.dob));
+                document.getElementById('aadhar').value = userProfileData.aadharNo;
+                document.getElementById('pan').value = userProfileData.pan;
+
+                const greetingElement = document.getElementById("greeting");
+                greetingElement.textContent = `Hello, ${userProfileData.name}!`;
+                // Store original values for change detection
+                originalValues = {
+                    username: userProfileData.userName,
+                    name: userProfileData.name,
+                    phone: userProfileData.mobileNo,
+                    email: userProfileData.emailId,
+                };
+            })
+            .catch(error => console.error('Error fetching profile data:', error));
+    };
+
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function editorMode() {
+        const userName = document.getElementById('username');
+        const name = document.getElementById('name');
+        const mobile = document.getElementById('phone');
+        const email = document.getElementById('email');
+        const editButton = document.getElementById('editButton');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const saveButton = document.getElementById('saveButton');
+
+        // Toggle input field editing
+        const isDisabled = userName.disabled;
+        userName.disabled = !isDisabled;
+        name.disabled = !isDisabled;
+        mobile.disabled = !isDisabled;
+        email.disabled = !isDisabled;
+
+        // Toggle visibility of buttons
+    if (isDisabled) {
+        // Entering editor mode
+        editButton.style.display = "none";
+        cancelEdit.style.display = "block"; // Show save button when editing
+    } else {
+        // Exiting editor mode
+        editButton.style.display = "block";
+        cancelEdit.style.display = "none"; // Hide save button when not editing
+    }
+    }
+
+    function detectChanges() {
+        const userName = document.getElementById('username').value;
+        const name = document.getElementById('name').value;
+        const mobile = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const saveButton = document.getElementById('saveButton');
+
+        // Check if any value has changed
+        if (
+            userName !== originalValues.username ||
+            name !== originalValues.name ||
+            mobile !== originalValues.phone ||
+            email !== originalValues.email
+        ) {
+            saveButton.style.display = "block";// Show save button
+            document.getElementById('cancelEdit').style.display = "none"; // Disable X button toggle
+        } else {
+            saveButton.style.display = "none"; // Hide save button if no changes
+            document.getElementById('cancelEdit').style.display = "block"; // Restore X button toggle
+        }
+    }
+
+    function getUpdatedValues() {
+        const updatedValues = {};
+        const currentValues = {
+            username: document.getElementById('username').value,
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+        };
+
+        // Compare current values with original values and include only changed fields
+        for (const key in currentValues) {
+            if (currentValues[key] !== originalValues[key]) {
+                updatedValues[key] = currentValues[key];
+            }
+        }
+
+        return updatedValues;
+    }
+    
+    async function saveChanges() {
+    	
+    	console.log("saveChanges has been called!");
+        // Collect the updated values
+        const updatedValues = getUpdatedValues();
+        
+		if (Object.keys(updatedValues).length > 0) 
+		{        
+	        updatedValues.userid = document.getElementById('userid').value;
+        	const jsonData = JSON.stringify(updatedValues);
+        	console.log("Sending updated values to the server:", jsonData);
+
+        // Example AJAX request
+        const response= await fetch('/NetBankingApplication/updateProfile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonData
+        });
+        
+        const data = await response.json(); // Parse the JSON response
+
+        if (response.ok) 
+        {
+            alert("Values updated successfully!");
+            location.reload();
+        }
+        else
+        {
+        	alert("Error updating the details. Try again later!");
+        }
+        
+		}
+    }
+
+    // Add event listeners for detecting changes in input fields
+    document.getElementById('username').addEventListener('input', detectChanges);
+    document.getElementById('name').addEventListener('input', detectChanges);
+    document.getElementById('phone').addEventListener('input', detectChanges);
+    document.getElementById('email').addEventListener('input', detectChanges);
+</script>
+
+</body>
+</html>

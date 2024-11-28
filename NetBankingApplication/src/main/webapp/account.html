@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Accounts</title>
+    <link rel="stylesheet" href="account.css">
+</head>
+<body>
+<div class="headerPart">
+        <a href="/NetBankingApplication/dashboard" id="homePage">Home</a>
+        <div class="nav-container" id="nav-account">
+            <span>My Accounts</span>
+            <div class="nav-menu" id="account-menu">
+                <img src="images/account.jpeg" alt="Account">
+                <ul>
+                    <li><a href="account.html">Account Details</a></li>
+                    <li><a href="#">Recent Transactions</a></li>
+                </ul>
+            </div>
+        </div>  
+        <div class="nav-container" id="nav-payment">
+            <span>Make Payments</span>
+            <div class="nav-menu" id="payment-menu">
+                <img src="images/Money-transfer.jpg" alt="Payments">
+                <ul>
+                    <li><a href="#">Money Transfer</a></li>
+                    <li><a href="#">Credit Card Bill Payment</a></li>
+                    <li><a href="#">Bills Payment and Recharges</a></li>
+                    <li><a href="#">FastTag Payment</a></li>
+                </ul>
+            </div>
+        </div>
+    <div id="profile-container">
+        <img src="images/profile.png" alt="Profile" id="profile-icon">
+        <div id="profile-menu">
+            <ul>
+            <li>
+            	<a href="profile.html">
+            	<img src="images/edit.png" alt="profile" class="profile-menu-icon">
+           	 	<span class="menuNames">View / Edit Profile</span>
+            	</a>
+            </li>
+                <li><a href="/NetBankingApplication/logout"><img src="images/logout.svg" alt="Logout" class="profile-menu-icon"><span class="menuNames">Log Out</span></a></li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <div id="headerStyle"></div>
+    <div class="header">
+        <img src="images/logoCircle.png" alt="Main Bank Logo" class="logo">
+        <p id="greeting">Hello, User!</p>
+        <p class="greetingLine2">Have a nice Day :)</p>
+    </div>
+    <div class="container">
+        <h1>Customer Accounts</h1>
+        <div id="accounts-container">
+            <!-- Account containers will be dynamically inserted here -->
+        </div>
+    </div>
+	
+	    <div id="footer">
+        <a href="#" class="links">Disclaimer</a>
+        <a href="#" class="links">Terms and Conditions</a>
+        <a href="#" class="links">Privacy Policy</a>
+        <a href="#" class="links">Code of Commitment</a>
+        <span id="cr">Copyright &copy; 2024 Main Bank. All rights reserved</span>
+    </div>
+    <script src="accountScript.js"></script>
+</body>
+</html>
